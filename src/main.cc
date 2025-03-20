@@ -26,6 +26,7 @@ int main() {
             break;
 
         forth.run(input);
+        forth.printStack();
     }
 
     return 0;

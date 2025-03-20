@@ -24,6 +24,7 @@ public:     // public methods
     virtual ~ForthInterpreter();
 
     virtual void run(const std::string&);
+    virtual void printStack();
 
     // no copy or move semantics
     ForthInterpreter(const ForthInterpreter&) = delete;

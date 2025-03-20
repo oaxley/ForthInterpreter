@@ -53,6 +53,15 @@ void ForthInterpreter::run(const std::string& input)
     }
 }
 
+// print the stack (for debug mode)
+void ForthInterpreter::printStack() {
+    std::cout << "Stack : ";
+    for (auto i : stack_) {
+        std::cout << i << " ";
+    }
+    std::cout << "\n";
+}
+
 // ----- private implementation
 
 // duplicate the top of the stack
