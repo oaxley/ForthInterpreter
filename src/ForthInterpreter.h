@@ -50,7 +50,7 @@ void ForthInterpreter::binaryOperator(T op)
 {
     // ensure the stack has at least 2 values
     if (stack_.size() < 2) {
-        std::cerr << "Error: not enough values on the stack!\n"
+        std::cerr << "Error: not enough values on the stack!\n";
         return;
     }
 
