@@ -8,6 +8,9 @@
 // ----- includes
 #include "ForthInterpreter.h"
 
+#include <sstream>
+
+
 // ----- public implementation
 
 // constructor
@@ -69,7 +72,7 @@ void ForthInterpreter::drop()
 // swap the top and the level below
 void ForthInterpreter::swap()
 {
-    int s = stack_.size();
+    std::size_t s = stack_.size();
     if (s < 2)
         return;
     std::swap(stack_[s - 1], stack_[s - 2]);
