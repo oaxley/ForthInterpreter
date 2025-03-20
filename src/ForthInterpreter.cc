@@ -34,7 +34,7 @@ ForthInterpreter::ForthInterpreter()
 
 /* Execute the interpreter on the input line
  * Args:
- *  input (std::string_view) : the input from the user
+ *  input (std::string) : the input from the user
  */
 void ForthInterpreter::run(const std::string& input)
 {
@@ -84,7 +84,7 @@ void ForthInterpreter::swap()
  * Returns
  *  True if the string is a number
  */
-bool ForthInterpreter(std::string_view token)
+bool ForthInterpreter::isNumber(std::string_view token)
 {
     if (token.empty())
         return false;
