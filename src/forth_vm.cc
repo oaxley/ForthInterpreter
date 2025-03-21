@@ -25,6 +25,9 @@ ForthVM::ForthVM()
     functions_["DUP"] = [this]() { dup(); };
     functions_["DROP"] = [this]() { drop(); };
     functions_["SWAP"] = [this]() { swap(); };
+
+    functions_[":"] = [this]() { beginDefinition(); };
+    functions_[";"] = [this]() { endDefinition(); };
 }
 
 // destructor
@@ -42,13 +45,20 @@ void ForthVM::run(const std::string& input)
     std::string token;
 
     while( stream >> token) {
-        if (isNumber(token))
+        if ((definefn_) && (token != ";")) {            // user defined function definition
+            if (fnname_.length() == 0) {
+                fnname_ = {token};
+            } else {
+                userfn_[fnname_].push_back(token);
+            }
+        } else if (isNumber(token)) {                   // token is a number
             stack_.push_back(std::stoi(token));
-        else {
-            if (functions_.contains(token))
-                functions_[token]();
-            else
-                std::cerr << "Unknown word [" << token << "]!\n";
+        } else if (functions_.contains(token)) {        // reserved keyword
+            functions_[token]();
+        } else if (userfn_.contains(token)) {           // user defined function
+            runDefinition(token);
+        } else {
+            std::cerr << "Unknown word [" << token << "]!\n";
         }
     }
 }
@@ -107,4 +117,30 @@ bool ForthVM::isNumber(std::string_view token)
         return true;
 
     return false;
+}
+
+// begin a user defined function definition
+void ForthVM::beginDefinition()
+{
+    definefn_ = true;
+    fnname_ = { };
+}
+
+// end a user defined function definition
+void ForthVM::endDefinition()
+{
+    definefn_ = false;
+    fnname_ = { };
+}
+
+/* execute a user defined functions
+ * Args:
+ *  token: the user defined token/function name
+ */
+void ForthVM::runDefinition(const std::string& fnname)
+{
+    // go through all the words in the definition and execute them
+    for(const auto& cmd : userfn_[fnname]) {
+        run(cmd);
+    }
 }

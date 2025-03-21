@@ -14,6 +14,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <deque>
 #include <functional>
 
 // ----- class
@@ -40,9 +41,18 @@ private:    // private methods
 
     template<typename T> void binaryOperator(T);
 
+    void beginDefinition();
+    void endDefinition();
+    void runDefinition(const std::string&);
+
 private:    // private members
     std::vector<int> stack_;
     std::unordered_map<std::string, std::function<void()>> functions_;
+
+    // user defined functions
+    std::unordered_map<std::string, std::deque<std::string>> userfn_;
+    std::string fnname_;
+    bool definefn_ {false};
 };
 
 // ----- template
