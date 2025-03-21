@@ -10,12 +10,14 @@
 #define FORTH_VM_H_
 
 // ----- includes
-#include <iostream>
-#include <string>
-#include <vector>
-#include <unordered_map>
 #include <deque>
 #include <functional>
+#include <iostream>
+#include <stack>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
 
 // ----- class
 class ForthVM
