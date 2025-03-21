@@ -17,7 +17,7 @@ TARGET := $(BIN_DIR)/slForth
 SOURCES := $(wildcard $(SRC_DIR)/*.cc)
 OBJECTS := $(patsubst $(SRC_DIR)/%.cc, $(BIN_DIR)/%.o, $(SOURCES))
 
-.PHONY: all clean
+.PHONY: all clean run
 
 all: $(BIN_DIR) $(TARGET)
 
@@ -33,3 +33,6 @@ $(BIN_DIR)/%.o: $(SRC_DIR)/%.cc
 clean:
 	@ rm -f $(BIN_DIR)/*.o
 	@ rm -f $(TARGET)
+
+run:
+	@$(TARGET)
