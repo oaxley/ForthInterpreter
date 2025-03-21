@@ -6,14 +6,14 @@
  */
 
 // ----- includes
-#include "ForthInterpreter.h"
+#include "forth_vm.h"
 
 #include <iostream>
 
 
 // ----- main
 int main() {
-    ForthInterpreter forth;
+    ForthVM forth;
     std::string input;
 
     std::cout << "Forth Interpreter. Enter 'exit' to quit.\n";

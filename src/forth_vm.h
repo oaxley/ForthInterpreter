@@ -1,13 +1,13 @@
 /*
- * @file    ForthInterpreter.h
+ * @file    forth_vm.h
  * @author  Sebastien LEGRAND
  *
- * @brief   Interface / Forth Interpreter
+ * @brief   Interface / Forth Virtual Machine
  */
 
 // ----- header guards
-#ifndef FORTH_INTERPRETER_H_
-#define FORTH_INTERPRETER_H_
+#ifndef FORTH_VM_H_
+#define FORTH_VM_H_
 
 // ----- includes
 #include <iostream>
@@ -17,20 +17,20 @@
 #include <functional>
 
 // ----- class
-class ForthInterpreter
+class ForthVM
 {
 public:     // public methods
-    ForthInterpreter();
-    virtual ~ForthInterpreter();
+    ForthVM();
+    virtual ~ForthVM();
 
     virtual void run(const std::string&);
     virtual void printStack();
 
     // no copy or move semantics
-    ForthInterpreter(const ForthInterpreter&) = delete;
-    ForthInterpreter& operator=(const ForthInterpreter&) = delete;
-    ForthInterpreter(ForthInterpreter&&) = delete;
-    ForthInterpreter& operator=(ForthInterpreter&&) = delete;
+    ForthVM(const ForthVM&) = delete;
+    ForthVM& operator=(const ForthVM&) = delete;
+    ForthVM(ForthVM&&) = delete;
+    ForthVM& operator=(ForthVM&&) = delete;
 
 private:    // private methods
     void dup();
@@ -47,7 +47,7 @@ private:    // private members
 
 // ----- template
 template<typename T>
-void ForthInterpreter::binaryOperator(T op)
+void ForthVM::binaryOperator(T op)
 {
     // ensure the stack has at least 2 values
     if (stack_.size() < 2) {
@@ -62,4 +62,4 @@ void ForthInterpreter::binaryOperator(T op)
     stack_.push_back(op(a, b));
 }
 
-#endif // FORTH_INTERPRETER_H_
+#endif // FORTH_VM_H_

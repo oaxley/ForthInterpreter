@@ -1,12 +1,12 @@
 /*
- * @file    ForthInterpreter.cc
+ * @file    forth_vm.cc
  * @author  Sebastien LEGRAND
  *
- * @brief   Implementation / Forth Interpreter
+ * @brief   Implementation / Forth Virtual Machine
  */
 
 // ----- includes
-#include "ForthInterpreter.h"
+#include "forth_vm.h"
 
 #include <sstream>
 
@@ -14,7 +14,7 @@
 // ----- public implementation
 
 // constructor
-ForthInterpreter::ForthInterpreter()
+ForthVM::ForthVM()
 {
     // use lambdas to set the functions_ dictionary
     functions_["+"] = [this]() { binaryOperator(std::plus<>()); };
@@ -28,7 +28,7 @@ ForthInterpreter::ForthInterpreter()
 }
 
 // destructor
-/*virtual*/ ForthInterpreter::~ForthInterpreter()
+/*virtual*/ ForthVM::~ForthVM()
 {
 }
 
@@ -36,7 +36,7 @@ ForthInterpreter::ForthInterpreter()
  * Args:
  *  input (std::string) : the input from the user
  */
-void ForthInterpreter::run(const std::string& input)
+void ForthVM::run(const std::string& input)
 {
     std::istringstream stream(input);
     std::string token;
@@ -54,7 +54,7 @@ void ForthInterpreter::run(const std::string& input)
 }
 
 // print the stack (for debug mode)
-void ForthInterpreter::printStack() {
+void ForthVM::printStack() {
     std::cout << "Stack : ";
     for (auto i : stack_) {
         std::cout << i << " ";
@@ -65,21 +65,21 @@ void ForthInterpreter::printStack() {
 // ----- private implementation
 
 // duplicate the top of the stack
-void ForthInterpreter::dup()
+void ForthVM::dup()
 {
     if (!stack_.empty())
         stack_.push_back(stack_.back());
 }
 
 // drop the top of the stack
-void ForthInterpreter::drop()
+void ForthVM::drop()
 {
     if (!stack_.empty())
         stack_.pop_back();
 }
 
 // swap the top and the level below
-void ForthInterpreter::swap()
+void ForthVM::swap()
 {
     std::size_t s = stack_.size();
     if (s < 2)
@@ -93,7 +93,7 @@ void ForthInterpreter::swap()
  * Returns
  *  True if the string is a number
  */
-bool ForthInterpreter::isNumber(std::string_view token)
+bool ForthVM::isNumber(std::string_view token)
 {
     if (token.empty())
         return false;
