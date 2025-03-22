@@ -47,6 +47,11 @@ private:    // private methods
     void endDefinition();
     void runDefinition(const std::string&);
 
+    bool shouldExecute();
+    void processIf();
+    void processElse();
+    void processThen();
+
 private:    // private members
     std::vector<int> stack_;
     std::unordered_map<std::string, std::function<void()>> functions_;
@@ -55,6 +60,9 @@ private:    // private members
     std::unordered_map<std::string, std::deque<std::string>> userfn_;
     std::string fnname_;
     bool definefn_ {false};
+
+    // conditions stack (if..else..then)
+    std::stack<bool> cond_stack_;
 };
 
 // ----- template
