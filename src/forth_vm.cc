@@ -148,3 +148,46 @@ void ForthVM::runDefinition(const std::string& fnname)
         run(cmd);
     }
 }
+
+// check if the next instruction should be executed
+bool ForthVM::shouldExecute()
+{
+    return (cond_stack_.empty() || (!cond_stack_.top()));
+}
+
+// process IF
+void ForthVM::processIf()
+{
+    if (stack_.empty()) {
+        std::cerr << "Error: stack is empty!\n";
+        return;
+    }
+
+    // retrieve the top value on the stack
+    int condition = stack_.back(); stack_.pop_back();
+
+    // set the execution and condition stack
+    cond_stack_.push(condition == 0);
+}
+
+// process Else
+void ForthVM::processElse()
+{
+    if (cond_stack_.empty()) {
+        std::cerr << "Error: ELSE without an IF\n";
+        return;
+    }
+    // inverse the condition
+    cond_stack_.top() = !cond_stack_.top();
+}
+
+// process Then
+void ForthVM::processThen()
+{
+    if (cond_stack_.empty()) {
+        std::cerr << "Error: THEN without an IF\n";
+        return;
+    }
+    // remove one level from the stack
+    cond_stack_.pop();
+}
