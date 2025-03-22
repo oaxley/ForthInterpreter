@@ -17,14 +17,18 @@
 ForthVM::ForthVM()
 {
     // use lambdas to set the functions_ dictionary
-    functions_["+"] = [this]() { binaryOperator(std::plus<>()); };
-    functions_["-"] = [this]() { binaryOperator(std::minus<>()); };
-    functions_["*"] = [this]() { binaryOperator(std::multiplies<>()); };
-    functions_["/"] = [this]() { binaryOperator(std::divides<>()); };
+    functions_["+"] = [this]() { if (shouldExecute()) binaryOperator(std::plus<>()); };
+    functions_["-"] = [this]() { if (shouldExecute()) binaryOperator(std::minus<>()); };
+    functions_["*"] = [this]() { if (shouldExecute()) binaryOperator(std::multiplies<>()); };
+    functions_["/"] = [this]() { if (shouldExecute()) binaryOperator(std::divides<>()); };
 
-    functions_["DUP"] = [this]() { dup(); };
-    functions_["DROP"] = [this]() { drop(); };
-    functions_["SWAP"] = [this]() { swap(); };
+    functions_["DUP"] = [this]() { if (shouldExecute()) dup(); };
+    functions_["DROP"] = [this]() { if (shouldExecute()) drop(); };
+    functions_["SWAP"] = [this]() { if (shouldExecute()) swap(); };
+
+    functions_["IF"] = [this]() { processIf(); };
+    functions_["ELSE"] = [this]() { processElse(); };
+    functions_["THEN"] = [this]() { processThen(); };
 
     functions_[":"] = [this]() { beginDefinition(); };
     functions_[";"] = [this]() { endDefinition(); };
@@ -51,13 +55,13 @@ void ForthVM::run(const std::string& input)
             } else {
                 userfn_[fnname_].push_back(token);
             }
-        } else if (isNumber(token)) {                   // token is a number
-            stack_.push_back(std::stoi(token));
         } else if (functions_.contains(token)) {        // reserved keyword
-            functions_[token]();
-        } else if (userfn_.contains(token)) {           // user defined function
+                functions_[token]();
+        } else if (isNumber(token) && shouldExecute()) {                   // token is a number
+            stack_.push_back(std::stoi(token));
+        } else if (userfn_.contains(token) && shouldExecute()) {           // user defined function
             runDefinition(token);
-        } else {
+        } else if (shouldExecute()) {
             std::cerr << "Unknown word [" << token << "]!\n";
         }
     }
