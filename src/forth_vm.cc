@@ -35,6 +35,11 @@ ForthVM::ForthVM()
 
     functions_["NEGATE"] = [this]() { if (shouldExecute()) unaryOperator(std::negate<>()); };
 
+    functions_["AND"] = [this]() { if (shouldExecute()) binaryOperator(std::bit_and<>()); };
+    functions_["OR"] = [this]() { if (shouldExecute()) binaryOperator(std::bit_or<>()); };
+    functions_["XOR"] = [this]() { if (shouldExecute()) binaryOperator(std::bit_xor<>()); };
+    functions_["NOT"] = [this]() { if (shouldExecute()) unaryOperator(std::bit_not<>()); };
+
     functions_["IF"] = [this]() { processIf(); };
     functions_["ELSE"] = [this]() { processElse(); };
     functions_["THEN"] = [this]() { processThen(); };
