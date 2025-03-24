@@ -43,6 +43,7 @@ private:    // private methods
     void printTOS();
 
     template<typename T> void binaryOperator(T);
+    template<typename T> void unaryOperator(T);
 
     void beginDefinition();
     void endDefinition();
@@ -66,7 +67,7 @@ private:    // private members
     std::stack<bool> cond_stack_;
 };
 
-// ----- template
+// ----- templates
 template<typename T>
 void ForthVM::binaryOperator(T op)
 {
@@ -81,6 +82,21 @@ void ForthVM::binaryOperator(T op)
     int a = stack_.back(); stack_.pop_back();
 
     stack_.push_back(op(a, b));
+}
+
+template<typename T>
+void ForthVM::unaryOperator(T op)
+{
+    // ensure the stack has at least 1 value
+    if (stack_.size() < 1) {
+        std::cerr << "Error: not enough values on the stack!\n";
+        return;
+    }
+
+    // retrieve the value
+    int a = stack_.back(); stack_.pop_back();
+
+    stack_.push_back(op(a));
 }
 
 #endif // FORTH_VM_H_

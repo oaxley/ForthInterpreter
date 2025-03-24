@@ -27,12 +27,13 @@ ForthVM::ForthVM()
     functions_["<"] = [this]() { if (shouldExecute()) binaryOperator(std::less<>()); };
     functions_["="] = [this]() { if (shouldExecute()) binaryOperator(std::equal_to<>()); };
 
-
     functions_["."] = [this]() { if (shouldExecute()) printTOS(); };
 
     functions_["DUP"] = [this]() { if (shouldExecute()) dup(); };
     functions_["DROP"] = [this]() { if (shouldExecute()) drop(); };
     functions_["SWAP"] = [this]() { if (shouldExecute()) swap(); };
+
+    functions_["NEGATE"] = [this]() { if (shouldExecute()) unaryOperator(std::negate<>()); };
 
     functions_["IF"] = [this]() { processIf(); };
     functions_["ELSE"] = [this]() { processElse(); };
