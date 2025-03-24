@@ -40,6 +40,7 @@ private:    // private methods
     void swap();
     void drop();
     bool isNumber(std::string_view);
+    void printTOS();
 
     template<typename T> void binaryOperator(T);
 

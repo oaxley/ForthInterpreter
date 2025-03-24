@@ -21,6 +21,7 @@ ForthVM::ForthVM()
     functions_["-"] = [this]() { if (shouldExecute()) binaryOperator(std::minus<>()); };
     functions_["*"] = [this]() { if (shouldExecute()) binaryOperator(std::multiplies<>()); };
     functions_["/"] = [this]() { if (shouldExecute()) binaryOperator(std::divides<>()); };
+    functions_["."] = [this]() { if (shouldExecute()) printTOS(); };
 
     functions_["DUP"] = [this]() { if (shouldExecute()) dup(); };
     functions_["DROP"] = [this]() { if (shouldExecute()) drop(); };
@@ -190,4 +191,11 @@ void ForthVM::processThen()
     }
     // remove one level from the stack
     cond_stack_.pop();
+}
+
+// print the top of stack
+void ForthVM::printTOS()
+{
+    int top = stack_.back(); stack_.pop_back();
+    std::cout << top << "\n";
 }
