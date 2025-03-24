@@ -21,6 +21,13 @@ ForthVM::ForthVM()
     functions_["-"] = [this]() { if (shouldExecute()) binaryOperator(std::minus<>()); };
     functions_["*"] = [this]() { if (shouldExecute()) binaryOperator(std::multiplies<>()); };
     functions_["/"] = [this]() { if (shouldExecute()) binaryOperator(std::divides<>()); };
+    functions_["MOD"] = [this]() { if (shouldExecute()) binaryOperator(std::modulus<>()); };
+
+    functions_[">"] = [this]() { if (shouldExecute()) binaryOperator(std::greater<>()); };
+    functions_["<"] = [this]() { if (shouldExecute()) binaryOperator(std::less<>()); };
+    functions_["="] = [this]() { if (shouldExecute()) binaryOperator(std::equal_to<>()); };
+
+
     functions_["."] = [this]() { if (shouldExecute()) printTOS(); };
 
     functions_["DUP"] = [this]() { if (shouldExecute()) dup(); };
