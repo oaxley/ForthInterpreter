@@ -215,6 +215,9 @@ void ForthVM::processThen()
 // print the top of stack
 void ForthVM::printTOS()
 {
+    if (stack_.empty())
+        return;
+
     int top = stack_.back(); stack_.pop_back();
     std::cout << top << "\n";
 }
@@ -225,6 +228,9 @@ void ForthVM::printTOS()
  */
 void ForthVM::zeroCompare(ForthVM::ZeroCompFcn comp)
 {
+    if (stack_.empty())
+        return;
+
     // retrieve the top of the stack
     int top = stack_.back(); stack_.pop_back();
 
