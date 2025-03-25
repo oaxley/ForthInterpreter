@@ -47,7 +47,9 @@ ForthVM::ForthVM()
     functions_["NOT"] = [this]() { if (shouldExecute()) unaryOperator(std::bit_not<>()); };
 
     // stack display
-    functions_["."] = [this]() { if (shouldExecute()) printTOS(); };
+    functions_["."] = [this]() { if (shouldExecute()) display(DisplayFcn::Top); };
+    functions_["EMIT"] = [this]() { if (shouldExecute()) display(DisplayFcn::Emit); };
+    functions_["CR"] = [this]() { if (shouldExecute()) std::cout << "\n"; };
 
     // control flow
     functions_["IF"] = [this]() { processIf(); };
@@ -218,13 +220,22 @@ void ForthVM::processThen()
 }
 
 // print the top of stack
-void ForthVM::printTOS()
+void ForthVM::display(ForthVM::DisplayFcn fcn)
 {
     if (stack_.empty())
         return;
 
     int top = stack_.back(); stack_.pop_back();
-    std::cout << top << "\n";
+
+    switch (fcn)
+    {
+        case Top:
+            std::cout << top;
+            break;
+        case Emit:
+            std::cout << static_cast<char>(top);
+            break;
+    }
 }
 
 /* compare the top of the stack to 0 (zero)

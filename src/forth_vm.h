@@ -42,12 +42,18 @@ private:    // private enums
         Not_Equal
     };
 
+    enum DisplayFcn {
+        Top,
+        Emit,
+    };
+
 private:    // private methods
     void dup();
     void swap();
     void drop();
     bool isNumber(std::string_view);
-    void printTOS();
+
+    void display(DisplayFcn);
 
     template<typename T> void binaryOperator(T);
     template<typename T> void unaryOperator(T);
