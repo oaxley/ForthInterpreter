@@ -16,13 +16,15 @@
 // constructor
 ForthVM::ForthVM()
 {
-    // use lambdas to set the functions_ dictionary
+    // arithmetic operators
     functions_["+"] = [this]() { if (shouldExecute()) binaryOperator(std::plus<>()); };
     functions_["-"] = [this]() { if (shouldExecute()) binaryOperator(std::minus<>()); };
     functions_["*"] = [this]() { if (shouldExecute()) binaryOperator(std::multiplies<>()); };
     functions_["/"] = [this]() { if (shouldExecute()) binaryOperator(std::divides<>()); };
     functions_["MOD"] = [this]() { if (shouldExecute()) binaryOperator(std::modulus<>()); };
+    functions_["NEGATE"] = [this]() { if (shouldExecute()) unaryOperator(std::negate<>()); };
 
+    // comparison operators
     functions_[">"] = [this]() { if (shouldExecute()) binaryOperator(std::greater<>()); };
     functions_["<"] = [this]() { if (shouldExecute()) binaryOperator(std::less<>()); };
     functions_["="] = [this]() { if (shouldExecute()) binaryOperator(std::equal_to<>()); };
@@ -33,23 +35,26 @@ ForthVM::ForthVM()
     functions_["0>"] = [this]() { if (shouldExecute()) zeroCompare(ZeroCompFcn::Greater); };
     functions_["0<>"] = [this]() { if (shouldExecute()) zeroCompare(ZeroCompFcn::Not_Equal); };
 
-    functions_["."] = [this]() { if (shouldExecute()) printTOS(); };
-
+    // stack manipulation
     functions_["DUP"] = [this]() { if (shouldExecute()) dup(); };
     functions_["DROP"] = [this]() { if (shouldExecute()) drop(); };
     functions_["SWAP"] = [this]() { if (shouldExecute()) swap(); };
 
-    functions_["NEGATE"] = [this]() { if (shouldExecute()) unaryOperator(std::negate<>()); };
-
+    // bitwise operators
     functions_["AND"] = [this]() { if (shouldExecute()) binaryOperator(std::bit_and<>()); };
     functions_["OR"] = [this]() { if (shouldExecute()) binaryOperator(std::bit_or<>()); };
     functions_["XOR"] = [this]() { if (shouldExecute()) binaryOperator(std::bit_xor<>()); };
     functions_["NOT"] = [this]() { if (shouldExecute()) unaryOperator(std::bit_not<>()); };
 
+    // stack display
+    functions_["."] = [this]() { if (shouldExecute()) printTOS(); };
+
+    // control flow
     functions_["IF"] = [this]() { processIf(); };
     functions_["ELSE"] = [this]() { processElse(); };
     functions_["THEN"] = [this]() { processThen(); };
 
+    // word definition
     functions_[":"] = [this]() { beginDefinition(); };
     functions_[";"] = [this]() { endDefinition(); };
 }
