@@ -26,6 +26,7 @@ ForthVM::ForthVM()
     functions_[">"] = [this]() { if (shouldExecute()) binaryOperator(std::greater<>()); };
     functions_["<"] = [this]() { if (shouldExecute()) binaryOperator(std::less<>()); };
     functions_["="] = [this]() { if (shouldExecute()) binaryOperator(std::equal_to<>()); };
+    functions_["<>"] = [this]() { if (shouldExecute()) binaryOperator(std::not_equal_to<>()); };
 
     functions_["."] = [this]() { if (shouldExecute()) printTOS(); };
 
