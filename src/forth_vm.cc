@@ -74,8 +74,29 @@ void ForthVM::run(const std::string& input)
 {
     std::istringstream stream(input);
     std::string token;
+    bool in_comment {false};
 
-    while( stream >> token) {
+    while( stream >> token)
+    {
+        if (in_comment) {
+            // end of a comment
+            if (token.find(')') != std::string::npos) {
+                in_comment = false;
+            }
+            continue;
+        }
+
+        // start of a comment
+        if (token == "(") {
+            in_comment = true;
+            continue;
+        }
+
+        // line comment, stop processing here
+        if (token == "\\") {
+            break;
+        }
+
         if ((definefn_) && (token != ";")) {            // user defined function definition
             if (fnname_.length() == 0) {
                 fnname_ = {token};
