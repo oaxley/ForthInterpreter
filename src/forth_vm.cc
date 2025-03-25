@@ -28,6 +28,11 @@ ForthVM::ForthVM()
     functions_["="] = [this]() { if (shouldExecute()) binaryOperator(std::equal_to<>()); };
     functions_["<>"] = [this]() { if (shouldExecute()) binaryOperator(std::not_equal_to<>()); };
 
+    functions_["0="] = [this]() { if (shouldExecute()) zeroCompare(ZeroCompFcn::Equal); };
+    functions_["0<"] = [this]() { if (shouldExecute()) zeroCompare(ZeroCompFcn::Lesser); };
+    functions_["0>"] = [this]() { if (shouldExecute()) zeroCompare(ZeroCompFcn::Greater); };
+    functions_["0<>"] = [this]() { if (shouldExecute()) zeroCompare(ZeroCompFcn::Not_Equal); };
+
     functions_["."] = [this]() { if (shouldExecute()) printTOS(); };
 
     functions_["DUP"] = [this]() { if (shouldExecute()) dup(); };
@@ -212,4 +217,29 @@ void ForthVM::printTOS()
 {
     int top = stack_.back(); stack_.pop_back();
     std::cout << top << "\n";
+}
+
+/* compare the top of the stack to 0 (zero)
+ * Args:
+ *  comp : the test to perform
+ */
+void ForthVM::zeroCompare(ForthVM::ZeroCompFcn comp)
+{
+    // retrieve the top of the stack
+    int top = stack_.back(); stack_.pop_back();
+
+    switch (comp) {
+        case ZeroCompFcn::Equal:     // 0=
+            stack_.push_back(top == 0);
+            break;
+        case ZeroCompFcn::Lesser:     // 0<
+            stack_.push_back(top < 0);
+            break;
+        case ZeroCompFcn::Greater:     // 0>
+            stack_.push_back(top > 0);
+            break;
+        case ZeroCompFcn::Not_Equal:     // 0<>
+            stack_.push_back(top != 0);
+            break;
+    }
 }

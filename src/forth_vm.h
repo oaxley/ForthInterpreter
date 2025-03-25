@@ -18,7 +18,6 @@
 #include <unordered_map>
 #include <vector>
 
-
 // ----- class
 class ForthVM
 {
@@ -35,6 +34,14 @@ public:     // public methods
     ForthVM(ForthVM&&) = delete;
     ForthVM& operator=(ForthVM&&) = delete;
 
+private:    // private enums
+    enum ZeroCompFcn {
+        Equal,
+        Lesser,
+        Greater,
+        Not_Equal
+    };
+
 private:    // private methods
     void dup();
     void swap();
@@ -48,6 +55,7 @@ private:    // private methods
     void beginDefinition();
     void endDefinition();
     void runDefinition(const std::string&);
+    void zeroCompare(ZeroCompFcn);
 
     bool shouldExecute();
     void processIf();
