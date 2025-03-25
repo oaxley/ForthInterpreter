@@ -26,7 +26,8 @@ int main() {
             break;
 
         forth.run(input);
-        forth.printStack();
+        // forth.printStack();
+        std::cout << "OK\n";
     }
 
     return 0;
