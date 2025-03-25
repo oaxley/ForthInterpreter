@@ -230,7 +230,7 @@ void ForthVM::display(ForthVM::DisplayFcn fcn)
     switch (fcn)
     {
         case Top:
-            std::cout << top;
+            std::cout << top << " ";
             break;
         case Emit:
             std::cout << static_cast<char>(top);
