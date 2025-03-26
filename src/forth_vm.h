@@ -25,7 +25,8 @@ public:     // public methods
     ForthVM();
     virtual ~ForthVM();
 
-    virtual void run(const std::string&);
+    void run(const std::string&);
+    void load(const std::string&);
 
     // no copy or move semantics
     ForthVM(const ForthVM&) = delete;

@@ -9,6 +9,7 @@
 #include "forth_vm.h"
 
 #include <sstream>
+#include <fstream>
 
 
 // ----- public implementation
@@ -112,6 +113,26 @@ void ForthVM::run(const std::string& input)
         } else if (shouldExecute()) {
             std::cerr << "Unknown word [" << token << "]!\n";
         }
+    }
+}
+
+/* Load a program from a file
+ * Args:
+ *  filename (std::string) : the file to load
+ */
+void ForthVM::load(const std::string& filename)
+{
+    // open the file for reading
+    std::ifstream file {filename};
+    if (!file) {
+        std::cerr << "Error: unable to load the file [" << filename << "]\n";
+        return;
+    }
+
+    // read the file line by line
+    std::string line;
+    while(std::getline(file, line)) {
+        run(line);
     }
 }
 
