@@ -115,14 +115,6 @@ void ForthVM::run(const std::string& input)
     }
 }
 
-// print the stack (for debug mode)
-void ForthVM::printStack() {
-    std::cout << "Stack : ";
-    for (auto i : stack_) {
-        std::cout << i << " ";
-    }
-    std::cout << "\n";
-}
 
 // ----- private implementation
 

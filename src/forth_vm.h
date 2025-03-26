@@ -26,7 +26,6 @@ public:     // public methods
     virtual ~ForthVM();
 
     virtual void run(const std::string&);
-    virtual void printStack();
 
     // no copy or move semantics
     ForthVM(const ForthVM&) = delete;
