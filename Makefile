@@ -35,4 +35,4 @@ clean:
 	@ rm -f $(TARGET)
 
 run:
-	@$(TARGET)
+	@$(TARGET) $(FILENAME)

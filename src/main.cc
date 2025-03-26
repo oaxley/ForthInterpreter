@@ -12,12 +12,20 @@
 
 
 // ----- main
-int main() {
+int main(int argc, char* argv[]) {
     ForthVM forth;
     std::string input;
 
+    // look for a file
+    if (argc == 2) {
+        forth.load(argv[1]);
+        return 0;
+    }
+
+    // launch the interpreter instead
     std::cout << "Forth Interpreter. Enter 'exit' to quit.\n";
 
+    // mainloop
     while (true) {
         std::cout << "> ";
         std::getline(std::cin, input);
