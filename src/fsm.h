@@ -67,10 +67,10 @@ public:
 
     // add transitions to the engine
     void add(std::list<Transition>);
-    void add(Transition);
+    void add(const Transition&);
 
     // get the current state of the FSM
-    std::string_view state();
+    std::string_view state() const;
 
     // start and stop the FSM
     void start();
@@ -80,7 +80,7 @@ public:
     void update(const Event&);
 
     // check if a transition to a new state is possible (can) or not (cannot)
-    bool can(const State&);
+    bool can(const State&) const;
     bool cannot(const State&) const;
 
 private:
