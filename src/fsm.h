@@ -84,7 +84,7 @@ public:
     bool cannot(const State&) const;
 
 private:
-    bool has_ended_;
+    bool has_ended_ {true};
     State current_;
     std::unordered_map<std::string, std::unordered_map<std::string, State>> states_;
 };
