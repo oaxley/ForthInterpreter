@@ -26,11 +26,18 @@ Tokenizer::Tokenizer()
  */
 void Tokenizer::parse(const std::string& line)
 {
-    // set the underlying string, and ensure we start at the beginning
-    stream_.str(line);
-    stream_.seekg(0L);
+    // clear the current istream
+    clear();
 
-    // empty a potential list of unread tokens
+    // set the istream to the new line
+    stream_.str(line);
+}
+
+// clear the current istream
+void Tokenizer::clear()
+{
+    stream_.str("");
+    stream_.seekg(0L);
     next_token_.clear();
 }
 

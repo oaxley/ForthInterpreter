@@ -29,6 +29,7 @@ public:
     Tokenizer&& operator=(Tokenizer&&) = delete;
 
     void parse(const std::string&);
+    void clear();
     std::optional<std::string> next();
     std::optional<std::string> peek();
 
