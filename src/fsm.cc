@@ -32,6 +32,18 @@ void Engine::setup()
  */
 void Engine::add(const Transition& transition)
 {
+    // begin state lookup | record state object
+    if (!states_.contains(transition.begin.name)) {
+        states_[transition.begin.name]["__object"] = transition.begin;
+    }
+
+    // end state lookup | record state object
+    if (!states_.contains(transition.end.name)) {
+        states_[transition.end.name]["__object"] = transition.end;
+    }
+
+    // associate the begin state with the event and end state
+    states_[transition.begin.name][transition.event.name] = transition.end;
 }
 
 /* add a list of transitions to the FSM
@@ -40,6 +52,9 @@ void Engine::add(const Transition& transition)
  */
 void Engine::add(std::list<Transition> transitions)
 {
+    for (auto t : transitions) {
+        add(t);
+    }
 }
 
 /* get the current state of the FSM
@@ -54,13 +69,13 @@ std::string_view Engine::state() const
 // start the FSM
 void Engine::start()
 {
-
+    has_ended_ = false;
 }
 
 // stop the FSM
 void Engine::stop()
 {
-
+    has_ended_ = true;
 }
 
 // update the FSM with a new event
