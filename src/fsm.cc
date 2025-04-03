@@ -69,12 +69,28 @@ std::string_view Engine::state() const
 // start the FSM
 void Engine::start()
 {
+    // lookup for the starting state
+    for (const auto& state : states_) {
+        for (const auto& event : state.second) {
+            if (event.second.type == StateType::BEGIN_STATE) {
+                current_ = event.second;
+            }
+        }
+    }
     has_ended_ = false;
 }
 
 // stop the FSM
 void Engine::stop()
 {
+    // lookup for the ending state
+    for (const auto& state : states_) {
+        for (const auto& event : state.second) {
+            if (event.second.type == StateType::END_STATE) {
+                current_ = event.second;
+            }
+        }
+    }
     has_ended_ = true;
 }
 
