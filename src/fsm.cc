@@ -12,17 +12,13 @@
 namespace FSM {
 
 // constructor
-Engine::Engine()
+Engine::Engine(UserQueue_T& queue) :
+    queue_{queue}
 {
 }
 
 // destructor
 /*virtual*/ Engine::~Engine()
-{
-}
-
-// setup the FSM
-void Engine::setup()
 {
 }
 
@@ -112,7 +108,10 @@ bool Engine::update(const Event& event)
         return false;
 
     // move to the new state
-    current_ = map.at(event.name);
+    queue_.push(current_.exit);         // push the current exit action
+    current_ = map.at(event.name);      // switch state
+    queue_.push(current_.enter);        // push the (new) current enter action
+
 
     // check if the state is an end state
     if (current_.type == StateType::END_STATE)

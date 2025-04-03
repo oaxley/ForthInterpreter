@@ -11,6 +11,7 @@
 
 // ----- includes
 #include <list>
+#include <queue>
 #include <string>
 #include <unordered_map>
 
@@ -48,12 +49,15 @@ struct Transition
     State end;
 };
 
+// define user queue type
+using UserQueue_T = std::queue<std::string>;
+
 // main FSM class
 class Engine
 {
 public:
     // constructor and destructor
-    Engine();
+    Engine(UserQueue_T& queue);
     virtual ~Engine();
 
     // no copy or move semantics
@@ -61,9 +65,6 @@ public:
     Engine& operator=(const Engine&) = delete;
     Engine(const Engine&&) = delete;
     Engine& operator=(Engine&&) = delete;
-
-    // setup the FSM
-    void setup();
 
     // add transitions to the engine
     void add(std::list<Transition>);
@@ -90,6 +91,8 @@ private:
     using EventMap_T = std::unordered_map<std::string, State>;
     using StateMap_T = std::unordered_map<std::string, EventMap_T>;
     StateMap_T states_;
+
+    UserQueue_T& queue_;
 };
 
 
