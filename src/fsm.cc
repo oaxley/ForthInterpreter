@@ -84,7 +84,7 @@ void Engine::update(const Event& event)
 
 }
 
-/* check if a transition to a state is possible
+/* check if a transition from the current State, to the one specified is possible
  * Args:
  *      state : the target state to check
  * Returns:
@@ -92,10 +92,14 @@ void Engine::update(const Event& event)
  */
 bool Engine::can(const State& state) const
 {
-    return false;
+    // retrieve the map for the current state
+    const auto& map = states_.at(current_.name);
+
+    // check if the state exists in the map
+    return map.contains(state.name);
 }
 
-/* check if a transition to a state is NOT possible
+/* check if a transition from the current State, to the one specified is NOT possible
  * Args:
  *      state : the target state to check
  * Returns:
@@ -103,9 +107,8 @@ bool Engine::can(const State& state) const
  */
 bool Engine::cannot(const State& state) const
 {
-    return false;
+    return !can(state);
 }
-
 
 // ----- end namespace
 }
