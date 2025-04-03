@@ -94,10 +94,31 @@ void Engine::stop()
     has_ended_ = true;
 }
 
-// update the FSM with a new event
-void Engine::update(const Event& event)
+/* update the FSM with a new event
+ * Args:
+ *      event : the event to consider for the transition
+ * Returns:
+ *      True if the update is successful, false otherwise
+ */
+bool Engine::update(const Event& event)
 {
+    // nothing to do if the FSM has ended
+    if (has_ended_)
+        return false;
 
+    // ensure the event exists for the current state
+    const auto& map = states_.at(current_.name);
+    if (!map.contains(event.name))
+        return false;
+
+    // move to the new state
+    current_ = map.at(event.name);
+
+    // check if the state is an end state
+    if (current_.type == StateType::END_STATE)
+        has_ended_ = true;
+
+    return true;
 }
 
 /* check if a transition from the current State, to the one specified is possible

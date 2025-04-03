@@ -77,7 +77,7 @@ public:
     void stop();
 
     // update the FSM according to the new event
-    void update(const Event&);
+    bool update(const Event&);
 
     // check if a transition to a new state is possible (can) or not (cannot)
     bool can(const State&) const;
@@ -86,7 +86,10 @@ public:
 private:
     bool has_ended_ {true};
     State current_;
-    std::unordered_map<std::string, std::unordered_map<std::string, State>> states_;
+
+    using EventMap_T = std::unordered_map<std::string, State>;
+    using StateMap_T = std::unordered_map<std::string, EventMap_T>;
+    StateMap_T states_;
 };
 
 
