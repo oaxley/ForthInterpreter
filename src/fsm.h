@@ -94,6 +94,9 @@ public:
     int events() const;
     int transitions() const;
 
+    int stateIndex(std::string) const;
+    int eventIndex(std::string) const;
+
 private:
     bool has_ended_ {true};
     int current_ {-1};

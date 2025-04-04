@@ -200,5 +200,36 @@ int Engine::transitions() const
     return sum;
 }
 
+/* return the index of particular state
+ * Args:
+ *      name : the name of the state to look for
+ * Returns:
+ *      The index of the state or -1 if it cannot be found
+ */
+int Engine::stateIndex(std::string name) const
+{
+    for (int i = 0; i < static_cast<int>(states_.size()); ++i) {
+        if (states_[i].name == name)
+            return i;
+    }
+    return -1;
+}
+
+/* return the index of particular event
+ * Args:
+ *      name : the name of the event to look for
+ * Returns:
+ *      The index of the event or -1 if it cannot be found
+ */
+int Engine::eventIndex(std::string name) const
+{
+    for (int i = 0; i < static_cast<int>(events_.size()); ++i) {
+        if (events_[i].name == name)
+            return i;
+    }
+    return -1;
+}
+
+
 // ----- end namespace
 }
