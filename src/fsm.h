@@ -41,6 +41,14 @@ struct Event
     std::string name {};
 };
 
+// define a Transition in the FSM
+struct Transition
+{
+    int begin_state;
+    int event;
+    int end_state;
+};
+
 // define user types
 using UserQueue_T = std::queue<std::string>;
 
@@ -62,7 +70,7 @@ public:
     // add a new state, event and transition
     int addState(State);
     int addEvent(Event);
-    void addTransition(int, int, int);
+    void addTransition(Transition);
 
     // get the current state of the FSM
     std::string_view state() const;

@@ -52,9 +52,9 @@ int Engine::addEvent(Event e)
  *      event (int) : the event index
  *      end (int)   : the end state index
  */
-void Engine::addTransition(int begin, int event, int end)
+void Engine::addTransition(Transition t)
 {
-    transitions_[begin][event] = end;
+    transitions_[t.begin_state][t.event] = t.end_state;
 }
 
 /* get the current state of the FSM
