@@ -230,6 +230,36 @@ int Engine::eventIndex(std::string name) const
     return -1;
 }
 
+/* return a reference of the state, based on its index
+ * Args:
+ *      index : the index value inside the states_ vector
+ * Returns:
+ *      A reference to the corresponding state, nullopt otherwise
+ */
+std::optional<std::reference_wrapper<const State>> Engine::state(int index) const
+{
+    // boundaries checking
+    if ((index < 0) || (index > static_cast<int>(states_.size())))
+        return std::nullopt;
+
+    return std::cref(states_[index]);
+}
+
+/* return a reference of the state, based on its name
+ * Args:
+ *      index : the index value inside the states_ vector
+ * Returns:
+ *      A reference to the corresponding state, nullopt otherwise
+ */
+std::optional<std::reference_wrapper<const State>> Engine::state(std::string name) const
+{
+    for (const auto& s : states_) {
+        if (s.name == name)
+            return std::cref(s);
+    }
+
+    return std::nullopt;
+}
 
 // ----- end namespace
 }
