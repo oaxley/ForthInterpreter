@@ -68,9 +68,9 @@ public:
 
 
     // add a new state, event and transition
-    int addState(State);
-    int addEvent(Event);
-    void addTransition(Transition);
+    int add(State);
+    int add(Event);
+    void add(Transition);
 
     // get the current state of the FSM
     std::string_view state() const;

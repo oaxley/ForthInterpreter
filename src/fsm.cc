@@ -24,35 +24,34 @@ Engine::Engine(UserQueue_T& queue) :
 
 /* add a new state to the FSM
  * Args:
- *      state : the state to add to the FSM
+ *      s : the state to add to the FSM
  * Returns:
  *      The index where the state has been stored
  */
-int Engine::addState(State s)
+int Engine::add(State s)
 {
     states_.push_back(std::move(s));
-    return states_.size() - 1;
+    return static_cast<int>(states_.size() - 1);
 }
 
 /* add a new event to the FSM
  * Args:
- *      event : the event to add to the FSM
+ *      e : the event to add to the FSM
  * Returns:
  *      The index where the event has been stored
  */
-int Engine::addEvent(Event e)
+int Engine::add(Event e)
 {
     events_.push_back(std::move(e));
-    return events_.size() - 1;
+    return static_cast<int>(events_.size() - 1);
 }
+
 
 /* add a transition to the FSM
  * Args:
- *      begin (int) : the begin state index
- *      event (int) : the event index
- *      end (int)   : the end state index
+ *      t : the transition to add to the FSM
  */
-void Engine::addTransition(Transition t)
+void Engine::add(Transition t)
 {
     transitions_[t.begin_state][t.event] = t.end_state;
 }
