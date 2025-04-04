@@ -114,10 +114,16 @@ bool Engine::update(int event)
     if (!map.contains(event))
         return false;
 
-    // move to the new state
-    queue_.push(states_[current_].exit);         // push the current exit action
+    // inform user we exit from current state
+    if (states_[current_].exit != "")
+        queue_.push(states_[current_].exit);
+
+    // move to the end state of the transition
     current_ = map.at(event);
-    queue_.push(states_[current_].enter);        // push the (new) current enter action
+
+    // inform the user we enter to current state
+    if (states_[current_].enter != "")
+        queue_.push(states_[current_].enter);
 
     // check if the state is an end state
     if (states_[current_].type == StateType::END_STATE)
