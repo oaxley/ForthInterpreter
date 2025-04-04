@@ -247,7 +247,7 @@ std::optional<std::reference_wrapper<const State>> Engine::state(int index) cons
 
 /* return a reference of the state, based on its name
  * Args:
- *      index : the index value inside the states_ vector
+ *      name : the name of the state
  * Returns:
  *      A reference to the corresponding state, nullopt otherwise
  */
@@ -260,6 +260,38 @@ std::optional<std::reference_wrapper<const State>> Engine::state(std::string nam
 
     return std::nullopt;
 }
+
+/* return a reference of the event, based on its index
+ * Args:
+ *      index : the index value inside the events_ vector
+ * Returns:
+ *      A reference to the corresponding event, nullopt otherwise
+ */
+std::optional<std::reference_wrapper<const Event>> Engine::event(int index) const
+{
+    // boundaries checking
+    if ((index < 0) || (index > static_cast<int>(events_.size())))
+        return std::nullopt;
+
+    return std::cref(events_[index]);
+}
+
+/* return a reference of the event, based on its name
+ * Args:
+ *      index : the name of the event
+ * Returns:
+ *      A reference to the corresponding event, nullopt otherwise
+ */
+std::optional<std::reference_wrapper<const Event>> Engine::event(std::string name) const
+{
+    for (const auto& e : events_) {
+        if (e.name == name)
+            return std::cref(e);
+    }
+
+    return std::nullopt;
+}
+
 
 // ----- end namespace
 }

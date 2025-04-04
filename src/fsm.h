@@ -97,10 +97,12 @@ public:
     int transitions() const;
 
     int stateIndex(std::string) const;
-    int eventIndex(std::string) const;
-
     std::optional<std::reference_wrapper<const State>> state(int) const;
     std::optional<std::reference_wrapper<const State>> state(std::string) const;
+
+    int eventIndex(std::string) const;
+    std::optional<std::reference_wrapper<const Event>> event(int) const;
+    std::optional<std::reference_wrapper<const Event>> event(std::string) const;
 
 
 private:
