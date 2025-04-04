@@ -22,35 +22,39 @@ Engine::Engine(UserQueue_T& queue) :
 {
 }
 
-/* add a transition to the FSM
+/* add a new state to the FSM
  * Args:
- *      transition : the transition to add to the FSM
+ *      state : the state to add to the FSM
+ * Returns:
+ *      The index where the state has been stored
  */
-void Engine::add(const Transition& transition)
+int Engine::addState(State s)
 {
-    // begin state lookup | record state object
-    if (!states_.contains(transition.begin.name)) {
-        states_[transition.begin.name]["__object"] = transition.begin;
-    }
-
-    // end state lookup | record state object
-    if (!states_.contains(transition.end.name)) {
-        states_[transition.end.name]["__object"] = transition.end;
-    }
-
-    // associate the begin state with the event and end state
-    states_[transition.begin.name][transition.event.name] = transition.end;
+    states_.push_back(std::move(s));
+    return states_.size() - 1;
 }
 
-/* add a list of transitions to the FSM
+/* add a new event to the FSM
  * Args:
- *      transitions : the list of transitions to add
+ *      event : the event to add to the FSM
+ * Returns:
+ *      The index where the event has been stored
  */
-void Engine::add(std::list<Transition> transitions)
+int Engine::addEvent(Event e)
 {
-    for (auto t : transitions) {
-        add(t);
-    }
+    events_.push_back(std::move(e));
+    return events_.size() - 1;
+}
+
+/* add a transition to the FSM
+ * Args:
+ *      begin (int) : the begin state index
+ *      event (int) : the event index
+ *      end (int)   : the end state index
+ */
+void Engine::addTransition(int begin, int event, int end)
+{
+    transitions_[begin][event] = end;
 }
 
 /* get the current state of the FSM
@@ -59,35 +63,35 @@ void Engine::add(std::list<Transition> transitions)
  */
 std::string_view Engine::state() const
 {
-    return current_.name;
+    return states_[current_].name;
 }
 
 // start the FSM
-void Engine::start()
+bool Engine::start()
 {
-    // lookup for the starting state
-    for (const auto& state : states_) {
-        for (const auto& event : state.second) {
-            if (event.second.type == StateType::BEGIN_STATE) {
-                current_ = event.second;
-            }
+    // go through all the states, and find the one marked BEGIN_STATE
+    for (int i = 0; i < static_cast<int>(states_.size()); ++i) {
+        if (states_[i].type == StateType::BEGIN_STATE) {
+            current_ = i;
+            has_ended_ = false;
+            return true;
         }
     }
-    has_ended_ = false;
+    return false;
 }
 
 // stop the FSM
-void Engine::stop()
+bool Engine::stop()
 {
-    // lookup for the ending state
-    for (const auto& state : states_) {
-        for (const auto& event : state.second) {
-            if (event.second.type == StateType::END_STATE) {
-                current_ = event.second;
-            }
+    // go through all the states, and find the one marked END_STATE
+    for (int i = 0; i < static_cast<int>(states_.size()); ++i) {
+        if (states_[i].type == StateType::END_STATE) {
+            current_ = i;
+            has_ended_ = true;
+            return true;
         }
     }
-    has_ended_ = true;
+    return false;
 }
 
 /* update the FSM with a new event
@@ -96,25 +100,28 @@ void Engine::stop()
  * Returns:
  *      True if the update is successful, false otherwise
  */
-bool Engine::update(const Event& event)
+bool Engine::update(int event)
 {
     // nothing to do if the FSM has ended
     if (has_ended_)
         return false;
 
+    // ensure the event exists in our list
+    if (event >= static_cast<int>(events_.size()))
+        return false;
+
     // ensure the event exists for the current state
-    const auto& map = states_.at(current_.name);
-    if (!map.contains(event.name))
+    const auto& map = transitions_.at(current_);
+    if (!map.contains(event))
         return false;
 
     // move to the new state
-    queue_.push(current_.exit);         // push the current exit action
-    current_ = map.at(event.name);      // switch state
-    queue_.push(current_.enter);        // push the (new) current enter action
-
+    queue_.push(states_[current_].exit);         // push the current exit action
+    current_ = map.at(event);
+    queue_.push(states_[current_].enter);        // push the (new) current enter action
 
     // check if the state is an end state
-    if (current_.type == StateType::END_STATE)
+    if (states_[current_].type == StateType::END_STATE)
         has_ended_ = true;
 
     return true;
@@ -126,13 +133,15 @@ bool Engine::update(const Event& event)
  * Returns:
  *      True if the transition is possible, False otherwise
  */
-bool Engine::can(const State& state) const
+bool Engine::can(int s) const
 {
-    // retrieve the map for the current state
-    const auto& map = states_.at(current_.name);
+    // check if the state exists in the map for the current state
+    for (const auto& map : transitions_.at(current_)) {
+        if (map.second == s)
+            return true;
+    }
 
-    // check if the state exists in the map
-    return map.contains(state.name);
+    return false;
 }
 
 /* check if a transition from the current State, to the one specified is NOT possible
@@ -141,9 +150,9 @@ bool Engine::can(const State& state) const
  * Returns:
  *      True if the transition is not possible, False otherwise
  */
-bool Engine::cannot(const State& state) const
+bool Engine::cannot(int s) const
 {
-    return !can(state);
+    return !can(s);
 }
 
 // ----- end namespace

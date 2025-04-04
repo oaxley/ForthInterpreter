@@ -72,11 +72,11 @@ public:
     bool stop();
 
     // update the FSM according to the new event
-    bool update(const Event&);
+    bool update(int);
 
     // check if a transition to a new state is possible (can) or not (cannot)
-    bool can(const State&) const;
-    bool cannot(const State&) const;
+    bool can(int) const;
+    bool cannot(int) const;
 
 private:
     bool has_ended_ {true};
