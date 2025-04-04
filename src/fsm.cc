@@ -155,5 +155,45 @@ bool Engine::cannot(int s) const
     return !can(s);
 }
 
+/* check if the FSM has ended
+ * Return:
+ *      True if the FSM has ended
+ */
+bool Engine::hasEnded() const
+{
+    return has_ended_;
+}
+
+/* return the number of states
+ * Returns:
+ *      The number of states in the FSM
+ */
+int Engine::states() const
+{
+    return static_cast<int>(states_.size());
+}
+
+/* return the number of events
+ * Returns:
+ *      The number of events in the FSM
+ */
+int Engine::events() const
+{
+    return static_cast<int>(events_.size());
+}
+
+/* return the number of transitions
+ * Returns:
+ *      The number of transitions in the FSM
+ */
+int Engine::transitions() const
+{
+    int sum {0};
+    for (const auto& map : transitions_) {
+        sum = sum + static_cast<int>(map.second.size());
+    }
+    return sum;
+}
+
 // ----- end namespace
 }

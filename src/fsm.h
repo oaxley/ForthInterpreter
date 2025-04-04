@@ -78,6 +78,14 @@ public:
     bool can(int) const;
     bool cannot(int) const;
 
+    // check if the FSM is in END state
+    bool hasEnded() const;
+
+    // return the number of states / events / transitions
+    int states() const;
+    int events() const;
+    int transitions() const;
+
 private:
     bool has_ended_ {true};
     int current_ {-1};
