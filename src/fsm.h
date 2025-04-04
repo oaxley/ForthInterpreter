@@ -10,9 +10,9 @@
 #define FORTH_FSM_H_
 
 // ----- includes
-#include <list>
 #include <queue>
 #include <string>
+#include <vector>
 #include <unordered_map>
 
 // ----- begin namespace
@@ -41,15 +41,7 @@ struct Event
     std::string name {};
 };
 
-// define a Transition in the FSM
-struct Transition
-{
-    Event event;
-    State begin;
-    State end;
-};
-
-// define user queue type
+// define user types
 using UserQueue_T = std::queue<std::string>;
 
 // main FSM class
@@ -66,16 +58,18 @@ public:
     Engine(const Engine&&) = delete;
     Engine& operator=(Engine&&) = delete;
 
-    // add transitions to the engine
-    void add(std::list<Transition>);
-    void add(const Transition&);
+
+    // add a new state, event and transition
+    int addState(State);
+    int addEvent(Event);
+    void addTransition(int, int, int);
 
     // get the current state of the FSM
     std::string_view state() const;
 
     // start and stop the FSM
-    void start();
-    void stop();
+    bool start();
+    bool stop();
 
     // update the FSM according to the new event
     bool update(const Event&);
@@ -86,11 +80,16 @@ public:
 
 private:
     bool has_ended_ {true};
-    State current_;
+    int current_ {-1};
 
-    using EventMap_T = std::unordered_map<std::string, State>;
-    using StateMap_T = std::unordered_map<std::string, EventMap_T>;
-    StateMap_T states_;
+    std::vector<State> states_;
+    std::vector<Event> events_;
+
+    // event_map        => event ID, end state ID
+    // transition_map   => begin state ID, event_map
+    using EventMap_T = std::unordered_map<int, int>;
+    using TransitionMap_T = std::unordered_map<int, EventMap_T>;
+    TransitionMap_T transitions_ {};
 
     UserQueue_T& queue_;
 };
