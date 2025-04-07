@@ -132,6 +132,26 @@ bool Engine::update(int event)
     return true;
 }
 
+/* update the FSM with a new event
+ * Args:
+ *      event : the event to consider for the transition
+ * Returns:
+ *      True if the update is successful, false otherwise
+ */
+bool Engine::update(std::string event)
+{
+    // FSM has ended
+    if (has_ended_)
+        return false;
+
+    // retrieve the index for this event
+    int index = eventIndex(event);
+    if (index == -1)
+        return false;
+
+    return update(index);
+}
+
 /* check if a transition from the current State, to the one specified is possible
  * Args:
  *      state : the target state to check

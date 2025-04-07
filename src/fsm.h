@@ -83,6 +83,7 @@ public:
 
     // update the FSM according to the new event
     bool update(int);
+    bool update(std::string);
 
     // check if a transition to a new state is possible (can) or not (cannot)
     bool can(int) const;
